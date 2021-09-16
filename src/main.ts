@@ -1,14 +1,17 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import PerfectScrollbar from 'vue3-perfect-scrollbar'
-import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 import { setupStore } from '/@/store'
-import routes from './router'
+import router from '/@/router'
 
 import './assets/scss/app.scss'
+import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 
-const app = createApp(App)
-app.use(routes)
-app.use(PerfectScrollbar)
-setupStore(app)
-app.mount('#app')
+const bootstrap = () => {
+  const app = createApp(App)
+  app.use(router)
+  app.use(PerfectScrollbar)
+  setupStore(app)
+  app.mount('#app')
+}
+bootstrap()

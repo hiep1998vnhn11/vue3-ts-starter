@@ -57,42 +57,38 @@
   </Teleport>
 </template>
 <script lang="ts">
-  import { defineComponent, computed, unref, ref, watch, nextTick } from 'vue';
-  import { SearchOutlined } from '@ant-design/icons-vue';
-  import AppSearchFooter from './AppSearchFooter.vue';
-  import Icon from '/@/components/Icon';
-  import clickOutside from '/@/directives/clickOutside';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { useRefs } from '/@/hooks/core/useRefs';
-  import { useMenuSearch } from './useMenuSearch';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useAppInject } from '/@/hooks/web/useAppInject';
+  import { defineComponent, computed, unref, ref, watch, nextTick } from 'vue'
+  import AppSearchFooter from './AppSearchFooter.vue'
+  import clickOutside from '/@/directives/clickOutside'
+  import { useDesign } from '/@/hooks/web/useDesign'
+  import { useRefs } from '/@/hooks/core/useRefs'
+  import { useMenuSearch } from './useMenuSearch'
+  import { useAppInject } from '/@/hooks/web/useAppInject'
 
   const props = {
     visible: { type: Boolean },
-  };
+  }
 
   export default defineComponent({
     name: 'AppSearchModal',
-    components: { Icon, SearchOutlined, AppSearchFooter },
+    components: { AppSearchFooter },
     directives: {
       clickOutside,
     },
     props,
     emits: ['close'],
     setup(props, { emit }) {
-      const scrollWrap = ref<ElRef>(null);
-      const inputRef = ref<Nullable<HTMLElement>>(null);
+      const scrollWrap = ref<ElRef>(null)
+      const inputRef = ref<Nullable<HTMLElement>>(null)
 
-      const { t } = useI18n();
-      const { prefixCls } = useDesign('app-search-modal');
-      const [refs, setRefs] = useRefs();
-      const { getIsMobile } = useAppInject();
+      const { prefixCls } = useDesign('app-search-modal')
+      const [refs, setRefs] = useRefs()
+      const { getIsMobile } = useAppInject()
 
       const { handleSearch, searchResult, keyword, activeIndex, handleEnter, handleMouseenter } =
-        useMenuSearch(refs, scrollWrap, emit);
+        useMenuSearch(refs, scrollWrap, emit)
 
-      const getIsNotData = computed(() => !keyword || unref(searchResult).length === 0);
+      const getIsNotData = computed(() => !keyword || unref(searchResult).length === 0)
 
       const getClass = computed(() => {
         return [
@@ -100,26 +96,25 @@
           {
             [`${prefixCls}--mobile`]: unref(getIsMobile),
           },
-        ];
-      });
+        ]
+      })
 
       watch(
         () => props.visible,
         (visible: boolean) => {
           visible &&
             nextTick(() => {
-              unref(inputRef)?.focus();
-            });
+              unref(inputRef)?.focus()
+            })
         }
-      );
+      )
 
       function handleClose() {
-        searchResult.value = [];
-        emit('close');
+        searchResult.value = []
+        emit('close')
       }
 
       return {
-        t,
         prefixCls,
         getClass,
         handleSearch,
@@ -132,9 +127,9 @@
         handleMouseenter,
         handleClose,
         inputRef,
-      };
+      }
     },
-  });
+  })
 </script>
 <style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-app-search-modal';

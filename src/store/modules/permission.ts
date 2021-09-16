@@ -1,24 +1,12 @@
 import type { AppRouteRecordRaw, Menu } from '/@/router/types'
-
-import { useI18n } from '/@/hooks/web/useI18n'
 import { toRaw } from 'vue'
 import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper'
 import { transformRouteToMenu } from '/@/router/helper/menuHelper'
-
 import projectSetting from '/@/settings/projectSetting'
-
 import { PermissionModeEnum } from '/@/enums/appEnum'
-
-import { asyncRoutes } from '../../router'
-import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
-
 import { filter } from '/@/utils/helper/treeHelper'
-
 import { getMenuList } from '/@/api/sys/menu'
 import { getPermCode } from '/@/api/sys/user'
-
-import { useMessage } from '/@/hooks/web/useMessage'
-
 interface PermissionState {
   permCodeList: string[] | number[]
   isDynamicAddedRoute: boolean
@@ -42,7 +30,6 @@ const getters = {
 }
 const actions = {
   async buildRoutesAction({ commit, rootGetters }): Promise<AppRouteRecordRaw[]> {
-    const { t } = useI18n()
     let routes: AppRouteRecordRaw[] = []
     const roleList = toRaw(rootGetters['user/getRoleList']) || []
     const { permissionMode = projectSetting.permissionMode } = rootGetters['app/getProjectConfig']
@@ -60,13 +47,11 @@ const actions = {
     }
     switch (permissionMode) {
       case PermissionModeEnum.ROLE:
-        routes = filter(asyncRoutes, routeFilter)
         routes = routes.filter(routeFilter)
         routes = flatMultiLevelRoutes(routes)
         break
 
       case PermissionModeEnum.ROUTE_MAPPING:
-        routes = filter(asyncRoutes, routeFilter)
         routes = routes.filter(routeFilter)
         const menuList = transformRouteToMenu(routes, true)
         routes = filter(routes, routeRmoveIgnoreFilter)
@@ -79,10 +64,8 @@ const actions = {
         routes = flatMultiLevelRoutes(routes)
         break
       case PermissionModeEnum.BACK:
-        const { createMessage } = useMessage()
-
-        createMessage.loading({
-          content: t('sys.app.menuLoading'),
+        console.log({
+          content: 'sys.app.menuLoading',
           duration: 1,
         })
 
@@ -99,8 +82,7 @@ const actions = {
         commit('SET_STATE', ['backMenuList', backMenuList])
         routeList = filter(routeList, routeRmoveIgnoreFilter)
         routeList = routeList.filter(routeRmoveIgnoreFilter)
-        routeList = flatMultiLevelRoutes(routeList)
-        routes = [PAGE_NOT_FOUND_ROUTE, ...routeList]
+        routes = flatMultiLevelRoutes(routeList)
         break
     }
 

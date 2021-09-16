@@ -3,7 +3,6 @@ import { toRaw, unref } from 'vue'
 import { useGo, useRedo } from '/@/hooks/web/usePage'
 import { Persistent } from '/@/utils/cache/persistent'
 import { PageEnum } from '/@/enums/pageEnum'
-import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
 import { getRawRoute } from '/@/utils'
 import { MULTIPLE_TABS_KEY } from '/@/enums/cacheEnum'
 
@@ -129,7 +128,7 @@ const actions = {
   async addTab({ state, commit }, route: RouteLocationNormalized) {
     const { path, name, fullPath, params, query } = getRawRoute(route)
     // 404  The page does not need to add a tab
-    if (path === PageEnum.ERROR_PAGE || !name || name == PAGE_NOT_FOUND_ROUTE.name) {
+    if (path === PageEnum.ERROR_PAGE || !name) {
       return
     }
 

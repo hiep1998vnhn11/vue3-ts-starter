@@ -4,22 +4,17 @@ import type { AxiosTransform, CreateAxiosOptions } from './axiosTransform'
 import { VAxios } from './Axios'
 import { checkStatus } from './checkStatus'
 import { useGlobSetting } from '/@/hooks/setting'
-import { useMessage } from '/@/hooks/web/useMessage'
 import { RequestEnum, ResultEnum, ContentTypeEnum } from '/@/enums/httpEnum'
 import { isString } from '/@/utils/is'
 import { getToken } from '/@/utils/auth'
 import { setObjToUrlParams, deepMerge } from '/@/utils'
 import { store } from '/@/store'
-import { useI18n } from '/@/hooks/web/useI18n'
 import { joinTimestamp, formatRequestDate } from './helper'
 
 const globSetting = useGlobSetting()
 const urlPrefix = globSetting.urlPrefix
-const { createMessage, createErrorModal } = useMessage()
-
 const transform: AxiosTransform = {
   transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
-    const { t } = useI18n()
     const { isTransformResponse, isReturnNativeResponse } = options
     if (isReturnNativeResponse) {
       return res
@@ -29,7 +24,7 @@ const transform: AxiosTransform = {
     }
     const { data } = res
     if (!data) {
-      throw new Error(t('sys.api.apiRequestFailed'))
+      throw new Error('sys.api.apiRequestFailed')
     }
     const { code, result, message } = data
     const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS
@@ -39,7 +34,7 @@ const transform: AxiosTransform = {
     let timeoutMsg = ''
     switch (code) {
       case ResultEnum.TIMEOUT:
-        timeoutMsg = t('sys.api.timeoutMessage')
+        timeoutMsg = 'sys.api.timeoutMessage'
         break
       default:
         if (message) {
@@ -47,12 +42,12 @@ const transform: AxiosTransform = {
         }
     }
     if (options.errorMessageMode === 'modal') {
-      createErrorModal({ title: t('sys.api.errorTip'), content: timeoutMsg })
+      console.log({ title: 'sys.api.errorTip', content: timeoutMsg })
     } else if (options.errorMessageMode === 'message') {
-      createMessage.error(timeoutMsg)
+      console.error(timeoutMsg)
     }
 
-    throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'))
+    throw new Error(timeoutMsg || 'sys.api.apiRequestFailed')
   },
   beforeRequestHook: (config, options) => {
     const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true } = options
@@ -109,7 +104,6 @@ const transform: AxiosTransform = {
     return res
   },
   responseInterceptorsCatch: (error: any) => {
-    const { t } = useI18n()
     store.dispatch('errorLog/addAjaxErrorInfo', error)
     const { response, code, message, config } = error || {}
     const errorMessageMode = config?.requestOptions?.errorMessageMode || 'none'
@@ -119,21 +113,21 @@ const transform: AxiosTransform = {
 
     try {
       if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
-        errMessage = t('sys.api.apiTimeoutMessage')
+        errMessage = 'sys.api.apiTimeoutMessage'
       }
       if (err?.includes('Network Error')) {
-        errMessage = t('sys.api.networkExceptionMsg')
+        errMessage = 'sys.api.networkExceptionMsg'
       }
 
       if (errMessage) {
         if (errorMessageMode === 'modal') {
-          createErrorModal({ title: t('sys.api.errorTip'), content: errMessage })
+          console.log({ title: 'sys.api.errorTip', content: errMessage })
         } else if (errorMessageMode === 'message') {
-          createMessage.error(errMessage)
+          console.error(errMessage)
         }
         return Promise.reject(error)
       }
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error)
     }
 

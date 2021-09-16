@@ -4,7 +4,6 @@ import type { AxiosTransform, CreateAxiosOptions } from './axiosTransform'
 import { VAxios } from './Axios'
 import { checkStatus } from './checkStatus'
 import { useGlobSetting } from '/@/hooks/setting'
-import { useMessage } from '/@/hooks/web/useMessage'
 import { RequestEnum, ResultEnum, ContentTypeEnum } from '/@/enums/httpEnum'
 import { isString } from '/@/utils/is'
 import { getToken } from '/@/utils/auth'
@@ -14,8 +13,6 @@ import { joinTimestamp, formatRequestDate } from './helper'
 
 const globSetting = useGlobSetting()
 const urlPrefix = globSetting.urlPrefix
-const { createMessage, createErrorModal } = useMessage()
-
 const transform: AxiosTransform = {
   transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
     const { isTransformResponse, isReturnNativeResponse } = options
@@ -45,12 +42,12 @@ const transform: AxiosTransform = {
         }
     }
     if (options.errorMessageMode === 'modal') {
-      createErrorModal({ title: t('sys.api.errorTip'), content: timeoutMsg })
+      console.log({ title: 'sys.api.errorTip', content: timeoutMsg })
     } else if (options.errorMessageMode === 'message') {
-      createMessage.error(timeoutMsg)
+      console.error(timeoutMsg)
     }
 
-    throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'))
+    throw new Error(timeoutMsg || 'sys.api.apiRequestFailed')
   },
   beforeRequestHook: (config, options) => {
     const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true } = options
@@ -124,13 +121,13 @@ const transform: AxiosTransform = {
 
       if (errMessage) {
         if (errorMessageMode === 'modal') {
-          createErrorModal({ title: t('sys.api.errorTip'), content: errMessage })
+          console.log({ title: 'sys.api.errorTip', content: errMessage })
         } else if (errorMessageMode === 'message') {
-          createMessage.error(errMessage)
+          console.error(errMessage)
         }
         return Promise.reject(error)
       }
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error)
     }
 
