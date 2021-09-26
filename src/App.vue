@@ -1,17 +1,14 @@
 <template>
-  <router-view :key="key"></router-view>
+  <AppContainer />
 </template>
 
 <script>
-  import { defineComponent, computed } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { defineComponent } from 'vue'
+  import { AppContainer } from '/@/container'
   export default defineComponent({
-    setup() {
-      const route = useRoute()
-      const key = computed(() => route.fullPath)
-      return {
-        key,
-      }
+    name: 'App',
+    components: {
+      AppContainer,
     },
   })
 </script>

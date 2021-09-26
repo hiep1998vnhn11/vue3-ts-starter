@@ -1,5 +1,5 @@
 <template>
-  <div class="anticon" :class="getAppLogoClass" @click="goHome">
+  <div class="anticon app-logo" @click="goHome">
     <img :src="getSrc" />
   </div>
 </template>
@@ -8,7 +8,6 @@
   import { useGlobSetting } from '/@/hooks/setting'
   import { useGo } from '/@/hooks/web/usePage'
   import { useMenuSetting } from '/@/hooks/setting/useMenuSetting'
-  import { useDesign } from '/@/hooks/web/useDesign'
   import { PageEnum } from '/@/enums/pageEnum'
   import { useRoute } from 'vue-router'
 
@@ -21,23 +20,11 @@
   export default defineComponent({
     name: 'AppLogo',
     props: props,
-    setup(props) {
-      const { prefixCls } = useDesign('app-logo')
+    setup() {
       const { getCollapsedShowTitle, getCollapsed } = useMenuSetting()
       const { title } = useGlobSetting()
       const route = useRoute()
       const go = useGo()
-      const getAppLogoClass = computed(() => [
-        prefixCls,
-        props.theme,
-        { 'collapsed-show-title': unref(getCollapsedShowTitle) },
-      ])
-      const getTitleClass = computed(() => [
-        `${prefixCls}__title`,
-        {
-          'xs:opacity-0': !props.alwaysShowTitle,
-        },
-      ])
       const getSrc = computed(() =>
         !unref(getCollapsed) || route.name == 'Login' ? '/logoHNB.jpg' : '/logoHNB2.jpg'
       )
@@ -47,21 +34,16 @@
       }
 
       return {
-        getAppLogoClass,
-        getTitleClass,
         getCollapsedShowTitle,
         goHome,
         title,
-        prefixCls,
         getSrc,
       }
     },
   })
 </script>
-<style lang="less" scoped>
-  @prefix-cls: ~'@{namespace}-app-logo';
-
-  .@{prefix-cls} {
+<style lang="scss" scoped>
+  .app-logo {
     display: flex;
     align-items: center;
     padding-left: 7px;
@@ -69,7 +51,7 @@
     transition: all 0.2s ease;
 
     &.light {
-      border-bottom: 1px solid @border-color-base;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     &.collapsed-show-title {
@@ -77,11 +59,11 @@
     }
 
     &.light &__title {
-      color: @primary-color;
+      color: #efefef;
     }
 
     &.dark &__title {
-      color: @white;
+      color: #fff;
     }
 
     &__title {

@@ -18,6 +18,7 @@ const store = createStore({
     lock,
     multipleTab,
   },
+  strict: import.meta.env.DEV,
 })
 
 export function setupStore(app: App<Element>) {
