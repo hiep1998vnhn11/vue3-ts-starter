@@ -1,3 +1,18 @@
+<style lang="scss" scoped>
+  .basic-help {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+
+    &__wrap {
+      p {
+        margin-bottom: 0;
+      }
+    }
+  }
+</style>
 <script lang="tsx">
   import type { CSSProperties, PropType } from 'vue'
   import { defineComponent, computed, unref } from 'vue'
@@ -60,10 +75,10 @@
           return textList.map((text, index) => {
             return (
               <p key={text}>
-                <>
+                <div>
                   {props.showIndex ? `${index + 1}. ` : ''}
                   {text}
-                </>
+                </div>
               </p>
             )
           })
@@ -88,24 +103,3 @@
     },
   })
 </script>
-<style lang="less">
-  @prefix-cls: ~'@{namespace}-basic-help';
-
-  .@{prefix-cls} {
-    display: inline-block;
-    margin-left: 6px;
-    font-size: 14px;
-    color: @text-color-help-dark;
-    cursor: pointer;
-
-    &:hover {
-      color: @primary-color;
-    }
-
-    &__wrap {
-      p {
-        margin-bottom: 0;
-      }
-    }
-  }
-</style>

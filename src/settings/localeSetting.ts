@@ -1,4 +1,3 @@
-import type { DropMenu } from '../components/Dropdown'
 import type { LocaleSetting, LocaleType } from '/#/config'
 
 export const LOCALE: { [key: string]: LocaleType } = {
@@ -14,7 +13,7 @@ export const localeSetting: LocaleSetting = {
 }
 
 // locale list
-export const localeList: DropMenu[] = [
+export const localeList = [
   {
     text: 'Tiếng Việt',
     event: LOCALE.VI_VN,

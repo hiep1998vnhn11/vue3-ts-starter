@@ -1,6 +1,6 @@
 import { ThemeEnum } from '../enums/appEnum'
 
-export const prefixCls = 'sapo'
+export const prefixCls = 'vite'
 
 export const darkMode = ThemeEnum.LIGHT
 

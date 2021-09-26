@@ -15,10 +15,8 @@
           beforeEnter(el) {
             addClass(el, 'collapse-transition')
             if (!el.dataset) el.dataset = {}
-
             el.dataset.oldPaddingTop = el.style.paddingTop
             el.dataset.oldPaddingBottom = el.style.paddingBottom
-
             el.style.height = '0'
             el.style.paddingTop = 0
             el.style.paddingBottom = 0
@@ -35,7 +33,6 @@
               el.style.paddingTop = el.dataset.oldPaddingTop
               el.style.paddingBottom = el.dataset.oldPaddingBottom
             }
-
             el.style.overflow = 'hidden'
           },
 
@@ -50,7 +47,6 @@
             el.dataset.oldPaddingTop = el.style.paddingTop
             el.dataset.oldPaddingBottom = el.style.paddingBottom
             el.dataset.oldOverflow = el.style.overflow
-
             el.style.height = el.scrollHeight + 'px'
             el.style.overflow = 'hidden'
           },

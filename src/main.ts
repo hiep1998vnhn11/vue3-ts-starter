@@ -7,6 +7,8 @@ import router from '/@/router'
 import './assets/scss/app.scss'
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 
+import './bootstrap'
+
 const bootstrap = () => {
   const app = createApp(App)
   app.use(router)

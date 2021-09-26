@@ -9,6 +9,11 @@
   export default defineComponent({
     name: 'JsonPreview',
     components: { VueJsonPretty },
-    props: { data: Object },
+    props: {
+      data: {
+        type: Object,
+        default: () => ({}),
+      },
+    },
   })
 </script>
